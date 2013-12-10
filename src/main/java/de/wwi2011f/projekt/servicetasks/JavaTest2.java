@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import de.wwi2011f.projekt.tools.ServiceTools;
 
 public class JavaTest2 implements JavaDelegate {
-	private Logger log = LoggerFactory.getLogger(JavaTest1.class);
+	private Logger log = LoggerFactory.getLogger(JavaTest2.class);
 
 	@Override
 	public void execute(DelegateExecution processInstance) throws Exception {

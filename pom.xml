@@ -22,7 +22,7 @@
 			<artifactId>activiti-engine</artifactId>
 			<version>${activiti-version}</version>
 		</dependency>
-		
+
 		<!-- Activiti Spring integration -->
 		<!--  dependency>
 			<groupId>org.activiti</groupId>

@@ -45,7 +45,15 @@ public class ProcessTestMyProcess {
 		variableMap.put("name", "Activiti");
 		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("myProcess", variableMap);
 
+		// String object =
+		// (String)processInstance.getProcessVariables().get("name");
+
 		assertNotNull(processInstance.getId());
 		log.info("id " + processInstance.getId() + " " + processInstance.getProcessDefinitionId());
+	}
+
+	@Test
+	public void testHochladenAufSharepoint() throws Exception {
+		log.info("LALALALLALALALALAL");
 	}
 }
