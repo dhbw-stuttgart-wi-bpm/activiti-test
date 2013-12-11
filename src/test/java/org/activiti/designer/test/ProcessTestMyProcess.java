@@ -51,9 +51,4 @@ public class ProcessTestMyProcess {
 		assertNotNull(processInstance.getId());
 		log.info("id " + processInstance.getId() + " " + processInstance.getProcessDefinitionId());
 	}
-
-	@Test
-	public void testHochladenAufSharepoint() throws Exception {
-		log.info("LALALALLALALALALAL");
-	}
 }

@@ -1,0 +1,20 @@
+<!DOCTYPE Repository
+          PUBLIC "-//The Apache Software Foundation//DTD Jackrabbit 1.5//EN"
+          "http://jackrabbit.apache.org/dtd/repository-1.5.dtd">
+<Repository>
+
+	<!-- workspace configuration template: used to create the initial workspace 
+		if there's no workspace yet -->
+	<Workspace name="default">
+
+		<FileSystem class="org.apache.jackrabbit.core.fs.mem.MemoryFileSystem">
+			<param name="path" value="default/repository" />
+		</FileSystem>
+
+		<PersistenceManager
+			class="org.apache.jackrabbit.core.persistence.mem.InMemPersistenceManager">
+			<param name="persistent" value="false" />
+		</PersistenceManager>
+	</Workspace>
+
+</Repository>
