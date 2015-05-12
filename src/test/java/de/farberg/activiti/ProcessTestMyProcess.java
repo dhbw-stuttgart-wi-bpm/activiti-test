@@ -1,4 +1,4 @@
-package org.activiti.designer.test;
+package de.farberg.activiti;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -22,7 +22,7 @@ import de.uniluebeck.itm.util.logging.Logging;
 public class ProcessTestMyProcess {
 	private static Logger log;
 
-	private String filename = "diagrams/MyProcess.bpmn";
+	private String bpmnProcessFilename = "diagrams/MyProcess.bpmn20.xml";
 
 	@Rule
 	public ActivitiRule activitiRule = new ActivitiRule();
@@ -38,15 +38,15 @@ public class ProcessTestMyProcess {
 		RepositoryService repositoryService = activitiRule.getRepositoryService();
 		RuntimeService runtimeService = activitiRule.getRuntimeService();
 
-		InputStream bpmnProcess = getClass().getClassLoader().getResourceAsStream(filename);
+		InputStream bpmnProcess = getClass().getClassLoader().getResourceAsStream(bpmnProcessFilename);
 		repositoryService.createDeployment().addInputStream("myProcess.bpmn20.xml", bpmnProcess).deploy();
 
 		Map<String, Object> variableMap = new HashMap<String, Object>();
 		variableMap.put("name", "Activiti");
 		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("myProcess", variableMap);
 
-		// String object =
-		// (String)processInstance.getProcessVariables().get("name");
+		String nameProcessVariable = (String) processInstance.getProcessVariables().get("name");
+		log.debug("Obtained variable 'name' from instance: " + nameProcessVariable);
 
 		assertNotNull(processInstance.getId());
 		log.info("id " + processInstance.getId() + " " + processInstance.getProcessDefinitionId());
