@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
+  <process id="JavaScript-Task-Demo-Process" isExecutable="true">
+    <startEvent id="sid-24B43280-9F89-4F40-8781-3DFFC3C36C4C"></startEvent>
+    <endEvent id="sid-B37E5441-2785-459D-BFBF-727BFE7418BF"></endEvent>
+    <scriptTask id="javascript-demo-task" name="Demo Task in JavaScript" scriptFormat="javascript" >
+      <script>
+      		java.lang.System.out.println("Start of JavaScript script task");
+            
+            execution.setVariable("MeaningOfLife", 42 );
+         
+      		java.lang.System.out.println("End of JavaScript script task");
+	          
+	          </script>
+    </scriptTask>
+    <sequenceFlow id="flow1" sourceRef="sid-24B43280-9F89-4F40-8781-3DFFC3C36C4C" targetRef="javascript-demo-task"></sequenceFlow>
+    <sequenceFlow id="flow2" sourceRef="javascript-demo-task" targetRef="scripttask1"></sequenceFlow>
+    <scriptTask id="scripttask1" name="Script Task 2" scriptFormat="javascript" activiti:autoStoreVariables="false">
+      <script>java.lang.System.out.println( execution.getVariable("MeaningOfLife"));</script>
+    </scriptTask>
+    <sequenceFlow id="flow3" sourceRef="scripttask1" targetRef="sid-B37E5441-2785-459D-BFBF-727BFE7418BF"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_JavaScript-Task-Demo-Process">
+    <bpmndi:BPMNPlane bpmnElement="JavaScript-Task-Demo-Process" id="BPMNPlane_JavaScript-Task-Demo-Process">
+      <bpmndi:BPMNShape bpmnElement="sid-24B43280-9F89-4F40-8781-3DFFC3C36C4C" id="BPMNShape_sid-24B43280-9F89-4F40-8781-3DFFC3C36C4C">
+        <omgdc:Bounds height="35.0" width="35.0" x="120.0" y="112.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-B37E5441-2785-459D-BFBF-727BFE7418BF" id="BPMNShape_sid-B37E5441-2785-459D-BFBF-727BFE7418BF">
+        <omgdc:Bounds height="35.0" width="35.0" x="510.0" y="112.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="javascript-demo-task" id="BPMNShape_javascript-demo-task">
+        <omgdc:Bounds height="55.0" width="105.0" x="220.0" y="102.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttask1" id="BPMNShape_scripttask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="360.0" y="102.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="155.0" y="129.0"></omgdi:waypoint>
+        <omgdi:waypoint x="220.0" y="129.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="325.0" y="129.0"></omgdi:waypoint>
+        <omgdi:waypoint x="360.0" y="129.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="465.0" y="129.0"></omgdi:waypoint>
+        <omgdi:waypoint x="510.0" y="129.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
