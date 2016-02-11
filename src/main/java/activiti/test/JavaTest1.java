@@ -1,4 +1,4 @@
-package de.wwi2011f.projekt.servicetasks;
+package activiti.test;
 
 import java.util.Random;
 
@@ -7,10 +7,10 @@ import org.activiti.engine.delegate.JavaDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.wwi2011f.projekt.tools.ServiceTools;
+import activiti.test.tools.ServiceTools;
 
-public class JavaTest2 implements JavaDelegate {
-	private Logger log = LoggerFactory.getLogger(JavaTest2.class);
+public class JavaTest1 implements JavaDelegate {
+	private Logger log = LoggerFactory.getLogger(JavaTest1.class);
 
 	@Override
 	public void execute(DelegateExecution processInstance) throws Exception {

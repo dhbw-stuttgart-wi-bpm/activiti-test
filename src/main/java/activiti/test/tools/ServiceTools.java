@@ -1,4 +1,4 @@
-package de.wwi2011f.projekt.tools;
+package activiti.test.tools;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.slf4j.Logger;

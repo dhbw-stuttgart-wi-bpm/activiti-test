@@ -12,8 +12,8 @@
 		<sequenceFlow id="flow1" sourceRef="startevent1" targetRef="scripttask1"></sequenceFlow>
 		<endEvent id="endevent1" name="End"></endEvent>
 		<sequenceFlow id="flow2" sourceRef="scripttask1" targetRef="servicetask1"></sequenceFlow>
-		<serviceTask id="servicetask1" name="Java Test 1" activiti:class="de.wwi2011f.projekt.servicetasks.JavaTest1"></serviceTask>
-		<serviceTask id="servicetask2" name="Java Test 2" activiti:class="de.wwi2011f.projekt.servicetasks.JavaTest2"></serviceTask>
+		<serviceTask id="servicetask1" name="Java Test 1" activiti:class="activiti.test.JavaTest1"></serviceTask>
+		<serviceTask id="servicetask2" name="Java Test 2" activiti:class="activiti.test.JavaTest2"></serviceTask>
 		<sequenceFlow id="flow3" sourceRef="servicetask1" targetRef="servicetask2"></sequenceFlow>
 		<sequenceFlow id="flow4" sourceRef="servicetask2" targetRef="endevent1"></sequenceFlow>
 	</process>
