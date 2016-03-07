@@ -22,7 +22,9 @@ import de.uniluebeck.itm.util.logging.Logging;
 public class BookOrderProcessTest {
 	private static Logger log;
 
-	private String bpmnProcessFilename = "diagrams/BookOrderProcess.bpmn20.xml";
+	private static final String BPMN_FILE = "diagrams/BookOrderProcess.bpmn20.xml";
+
+	private static final String BPMN_PROCESS_ID = "BookOrderProcess";
 
 	@Rule
 	public ActivitiRule activitiRule = new ActivitiRule();
@@ -35,15 +37,23 @@ public class BookOrderProcessTest {
 
 	@Test
 	public void startProcess() throws Exception {
+
+		// Obtain a reference to Activiti's runtime service
 		RepositoryService repositoryService = activitiRule.getRepositoryService();
 		RuntimeService runtimeService = activitiRule.getRuntimeService();
 
-		InputStream bpmnProcess = getClass().getClassLoader().getResourceAsStream(bpmnProcessFilename);
-		repositoryService.createDeployment().addInputStream("diagrams/BookOrderProcess.bpmn20.xml", bpmnProcess).deploy();
+		// Read the BPMN 2.0 file from the filesystem and deploy the process to Activiti
+		InputStream bpmnProcessInputStream = getClass().getClassLoader().getResourceAsStream(BPMN_FILE);
+		repositoryService.createDeployment().addInputStream(BPMN_FILE, bpmnProcessInputStream).deploy();
 
-		Map<String, Object> variableMap = new HashMap<String, Object>();
-		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("BookOrderProcess", variableMap);
+		// Set initial variables for the process instances state
+		Map<String, Object> initialProcessVariables = new HashMap<String, Object>();
+		initialProcessVariables.put("book_isbn", "1234");
+
+		// Create an instance of the process and verify that is has started
+		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(BPMN_PROCESS_ID, initialProcessVariables);
 		assertNotNull(processInstance.getId());
+
 		log.info("id " + processInstance.getId() + " " + processInstance.getProcessDefinitionId());
 	}
 }

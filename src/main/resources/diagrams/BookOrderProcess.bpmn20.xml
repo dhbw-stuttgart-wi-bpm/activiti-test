@@ -3,31 +3,40 @@
   <process id="BookOrderProcess" name="Book Order Process" isExecutable="true">
     <startEvent id="startevent1" name="Start"></startEvent>
     <scriptTask id="scripttask1" name="Process payment" scriptFormat="groovy" activiti:autoStoreVariables="true">
-      <script>out:println "This is the process payment automated step that does nothing";
+      <script>out:println "Processing payment";
 			</script>
     </scriptTask>
     <endEvent id="endevent1" name="End"></endEvent>
-    <sequenceFlow id="book_available_flow" name="yes" sourceRef="exclusivegateway1" targetRef="endevent1">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${book_available == true}]]></conditionExpression>
-    </sequenceFlow>
+    <sequenceFlow id="book_available_flow" sourceRef="scripttask4" targetRef="endevent1"></sequenceFlow>
     <parallelGateway id="parallelgateway1" name="Parallel Gateway"></parallelGateway>
     <sequenceFlow id="flow5" sourceRef="startevent1" targetRef="parallelgateway1"></sequenceFlow>
     <sequenceFlow id="flow6" sourceRef="parallelgateway1" targetRef="scripttask1"></sequenceFlow>
-    <userTask id="usertask1" name="Check stock" activiti:candidateGroups="sales">
-      <extensionElements>
-        <activiti:formProperty id="book_available" name="book_available" type="boolean" variable="book_available" default="false" required="true"></activiti:formProperty>
-      </extensionElements>
-    </userTask>
-    <sequenceFlow id="flow7" sourceRef="parallelgateway1" targetRef="usertask1"></sequenceFlow>
+    <sequenceFlow id="flow7" sourceRef="parallelgateway1" targetRef="scripttask2"></sequenceFlow>
     <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
-    <sequenceFlow id="flow8" sourceRef="usertask1" targetRef="exclusivegateway1"></sequenceFlow>
-    <userTask id="usertask2" name="Order Book from Publisher" activiti:candidateGroups="sales"></userTask>
-    <sequenceFlow id="book_not_available_flow" name="no" sourceRef="exclusivegateway1" targetRef="usertask2">
+    <sequenceFlow id="flow8" sourceRef="scripttask2" targetRef="exclusivegateway1"></sequenceFlow>
+    <sequenceFlow id="book_not_available_flow" name="Book not available" sourceRef="exclusivegateway1" targetRef="scripttask3">
       <documentation>no</documentation>
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${book_available == false}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${bookAvailable == false}]]></conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="flow10" sourceRef="usertask2" targetRef="endevent1"></sequenceFlow>
-    <sequenceFlow id="flow11" sourceRef="scripttask1" targetRef="endevent1"></sequenceFlow>
+    <sequenceFlow id="flow10" sourceRef="scripttask3" targetRef="scripttask4"></sequenceFlow>
+    <sequenceFlow id="flow11" sourceRef="scripttask1" targetRef="scripttask4"></sequenceFlow>
+    <scriptTask id="scripttask2" name="Check stock" scriptFormat="javascript" activiti:autoStoreVariables="false">
+      <script>var bookAvailable = new java.util.Random().nextBoolean();
+
+java.lang.System.out.println("Book in stock: " + bookAvailable);
+
+execution.setVariable("bookAvailable",  bookAvailable);</script>
+    </scriptTask>
+    <scriptTask id="scripttask3" name="Order Book from Publisher" scriptFormat="groovy" activiti:autoStoreVariables="false">
+      <script>out:println "Ordering book from publisher";
+</script>
+    </scriptTask>
+    <scriptTask id="scripttask4" name="Process finished" scriptFormat="groovy" activiti:autoStoreVariables="false">
+      <script>out:println "Finished"</script>
+    </scriptTask>
+    <sequenceFlow id="flow12" name="Book available" sourceRef="exclusivegateway1" targetRef="scripttask4">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${bookAvailable == true}]]></conditionExpression>
+    </sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_BookOrderProcess">
     <bpmndi:BPMNPlane bpmnElement="BookOrderProcess" id="BPMNPlane_BookOrderProcess">
@@ -38,26 +47,26 @@
         <omgdc:Bounds height="55.0" width="105.0" x="200.0" y="88.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
-        <omgdc:Bounds height="35.0" width="35.0" x="600.0" y="231.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="727.0" y="231.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="parallelgateway1" id="BPMNShape_parallelgateway1">
         <omgdc:Bounds height="40.0" width="40.0" x="110.0" y="162.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
-        <omgdc:Bounds height="55.0" width="105.0" x="200.0" y="220.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
         <omgdc:Bounds height="40.0" width="40.0" x="350.0" y="228.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="usertask2" id="BPMNShape_usertask2">
-        <omgdc:Bounds height="71.0" width="105.0" x="440.0" y="290.0"></omgdc:Bounds>
+      <bpmndi:BPMNShape bpmnElement="scripttask2" id="BPMNShape_scripttask2">
+        <omgdc:Bounds height="55.0" width="105.0" x="200.0" y="220.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttask3" id="BPMNShape_scripttask3">
+        <omgdc:Bounds height="71.0" width="105.0" x="441.0" y="310.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttask4" id="BPMNShape_scripttask4">
+        <omgdc:Bounds height="55.0" width="105.0" x="580.0" y="221.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="book_available_flow" id="BPMNEdge_book_available_flow">
-        <omgdi:waypoint x="390.0" y="248.0"></omgdi:waypoint>
-        <omgdi:waypoint x="600.0" y="248.0"></omgdi:waypoint>
-        <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="12.0" width="18.0" x="400.0" y="248.0"></omgdc:Bounds>
-        </bpmndi:BPMNLabel>
+        <omgdi:waypoint x="685.0" y="248.0"></omgdi:waypoint>
+        <omgdi:waypoint x="727.0" y="248.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
         <omgdi:waypoint x="55.0" y="182.0"></omgdi:waypoint>
@@ -80,21 +89,28 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="book_not_available_flow" id="BPMNEdge_book_not_available_flow">
         <omgdi:waypoint x="370.0" y="268.0"></omgdi:waypoint>
-        <omgdi:waypoint x="370.0" y="325.0"></omgdi:waypoint>
-        <omgdi:waypoint x="440.0" y="325.0"></omgdi:waypoint>
+        <omgdi:waypoint x="370.0" y="345.0"></omgdi:waypoint>
+        <omgdi:waypoint x="441.0" y="345.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="12.0" width="12.0" x="380.0" y="268.0"></omgdc:Bounds>
+          <omgdc:Bounds height="13.0" width="100.0" x="380.0" y="273.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
-        <omgdi:waypoint x="545.0" y="325.0"></omgdi:waypoint>
-        <omgdi:waypoint x="617.0" y="325.0"></omgdi:waypoint>
-        <omgdi:waypoint x="617.0" y="266.0"></omgdi:waypoint>
+        <omgdi:waypoint x="546.0" y="345.0"></omgdi:waypoint>
+        <omgdi:waypoint x="632.0" y="345.0"></omgdi:waypoint>
+        <omgdi:waypoint x="632.0" y="276.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
         <omgdi:waypoint x="305.0" y="115.0"></omgdi:waypoint>
-        <omgdi:waypoint x="617.0" y="115.0"></omgdi:waypoint>
-        <omgdi:waypoint x="617.0" y="231.0"></omgdi:waypoint>
+        <omgdi:waypoint x="632.0" y="115.0"></omgdi:waypoint>
+        <omgdi:waypoint x="632.0" y="221.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="390.0" y="248.0"></omgdi:waypoint>
+        <omgdi:waypoint x="580.0" y="248.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="100.0" x="399.0" y="231.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
