@@ -1,54 +1,44 @@
 package activiti.test;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.test.ActivitiRule;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import de.uniluebeck.itm.util.logging.LogLevel;
-import de.uniluebeck.itm.util.logging.Logging;
+import util.ActivityHelper;
+import util.LoggerRule;
 
 public class JavaScriptTaskTest {
-	private static Logger log;
 
-	private String bpmnProcessFilename = "diagrams/JavaScriptTaskDemo.bpmn20.xml";
+	private static final String BPMN_FILE = "diagrams/JavaScriptTaskDemo.bpmn20.xml";
+
+	private static final String BPMN_PROCESS_ID = "JavaScript-Task-Demo-Process";
+
+	@Rule
+	public LoggerRule loggerRule = new LoggerRule();
 
 	@Rule
 	public ActivitiRule activitiRule = new ActivitiRule();
 
-	@BeforeClass
-	public static void routeLoggingToSlf4j() {
-		Logging.setLoggingDefaults(LogLevel.INFO, "[%-5p] %c{1}: %m%n");
-		log = LoggerFactory.getLogger(JavaScriptTaskTest.class);
-	}
-
 	@Test
 	public void startProcess() throws Exception {
-		RepositoryService repositoryService = activitiRule.getRepositoryService();
-		RuntimeService runtimeService = activitiRule.getRuntimeService();
+		// Get a reference to a per-test logger
+		Logger log = loggerRule.getLogger();
 
-		InputStream bpmnProcess = getClass().getClassLoader().getResourceAsStream(bpmnProcessFilename);
-		repositoryService.createDeployment().addInputStream("JavaScriptTaskDemo.bpmn20.xml", bpmnProcess).deploy();
+		// Set initial variables for the process instances state
+		Map<String, Object> initialProcessVariables = new HashMap<String, Object>();
 
-		Map<String, Object> variableMap = new HashMap<String, Object>();
+		// Deploy the process and create an instance of it
+		ProcessInstance processInstance = ActivityHelper.deployProcessAndCreateInstance(activitiRule, BPMN_FILE, BPMN_PROCESS_ID,
+				initialProcessVariables);
+		log.info("id = " + processInstance.getId() + ", process definition id = " + processInstance.getProcessDefinitionId());
 
-		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("JavaScript-Task-Demo-Process", variableMap);
-
+		// Display a variable that has been set from JavaScript
 		String nameProcessVariable = (String) processInstance.getProcessVariables().get("MeaningOfLife");
-		log.debug("Obtained variable 'MeaningOfLife' from instance: " + nameProcessVariable);
-
-		assertNotNull(processInstance.getId());
-		log.info("id " + processInstance.getId() + " " + processInstance.getProcessDefinitionId());
+		log.info("Obtained variable 'MeaningOfLife' from instance: " + nameProcessVariable);
 	}
 }

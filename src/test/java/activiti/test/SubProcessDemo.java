@@ -12,11 +12,11 @@ import org.slf4j.Logger;
 import util.ActivityHelper;
 import util.LoggerRule;
 
-public class BookOrderProcessTest {
+public class SubProcessDemo {
 
-	private static final String BPMN_FILE = "diagrams/BookOrderProcess.bpmn20.xml";
+	private static final String BPMN_FILE = "diagrams/SubProcessDemo.bpmn20.xml";
 
-	private static final String BPMN_PROCESS_ID = "BookOrderProcess";
+	private static final String BPMN_PROCESS_ID = "SubProcessDemo";
 
 	@Rule
 	public LoggerRule loggerRule = new LoggerRule();
@@ -31,7 +31,6 @@ public class BookOrderProcessTest {
 
 		// Set initial variables for the process instances state
 		Map<String, Object> initialProcessVariables = new HashMap<String, Object>();
-		initialProcessVariables.put("book_isbn", "978-1617290121");
 
 		// Deploy the process and create an instance of it
 		ProcessInstance processInstance = ActivityHelper.deployProcessAndCreateInstance(activitiRule, BPMN_FILE, BPMN_PROCESS_ID,
